@@ -1,0 +1,17 @@
+4
+1234
+Persona1
+18
+Masculino
+4321
+Persona2
+15
+Femenino
+1324
+Persona3
+20
+Masculino
+5678
+Persona4
+21
+Femenino
