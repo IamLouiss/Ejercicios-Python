@@ -1,57 +1,53 @@
 """
-En una tienda se tienen diferentes tipos de productos. Cada producto tiene
-un código, una descipción, un nombre y un precio. Existen varios tipos
-de productos. Cada tipo de producto tiene un nombre, un código y 10
-productos.
-
-(a) Se desea que define las estructuras de datos para almacenar un producto,
-y para almacenar un tipo de producto.
-
-(b) Supongamos ahora que tenemos un arreglo con 5 tipos de productos
-y deseamos aumentar en un 10% el precio de todos los productos que
-sean de un tipo con código C.
-
-(c) Haga una función que dado un código de producto P busque el
-producto en toda la estructura de datos y retorne verdadero si el
-producto existe o falso en caso contrario.
+Los productos que comercializa una determinada empresa son libros y
+CD. Cada producto viene caracterizado por un código que lo identifica de
+manera única, el precio base del mercado, y el IVA que se le aplica que es
+diferente en cada caso, el 8% para los libros y el 12% para los CD. Además
+las características propias de cada tipo de producto son para los Libros:
+título, autor(es), año de publicación, editorial, ISBN y para los CD: título,
+intérprete, año de publicación. Por otro lado, esta empresa aplica un 20%
+de descuento a los libros y un 10% a los CD. Por tanto, el precio de venta
+de cada producto se calculará como: precio base + %IVA - dto. Defina las
+clases que sean necesarias para representar los distintos tipos de productos
+que acabamos de especificar.
 """
 
-class Product:
-  def __init__(self, code : int, description : str, price : float):
-    self.code = code
-    self.description = description
-    self.price = price
+class Producto:
 
-  def __str__(self):
-    return f"{self.code} -- {self.description} -- ${self.price}"
+  def __init__(self, codigo, precio_base):
+    self.codigo = codigo
+    self.precio_base = precio_base
 
-class Product_type:
-  def __init__(self, name : str, code : int):
-    self.name = name
-    self.code = code
-    self.products = []
+class Libro(Producto):
 
-  def __str__(self):
-    return f"{self.name}({self.code})"
-  
-  def add_product(self, p_code : int, p_description : str, p_price : float):
-    if len(self.products) >= 10:
-      print("No se pueden agregar mas de 10 productos")
-      return
-    product = Product(p_code, p_description, p_price)
-    self.products.append(product)
+  def __init__(self, codigo, precio_base, titulo, autores, año_publicacion, editorial, isbn):
+    super().__init__(codigo, precio_base)
+    self.iva = 0.08
+    self.titulo = titulo
+    self.autores = autores
+    self.año_publicacion = año_publicacion
+    self.editorial = editorial
+    self.isbn = isbn
+    self.descuento = 0.20
 
-def add_percentage_price(types_of_products : list, percent = 0.10):
-  for type in types_of_products:
-    for product in type.products:
-      product.price += (product.price * percent)
+  @property
+  def precio_venta(self):
+    iva = self.precio_base * self.iva
+    descuento = self.precio_base * self.descuento
+    return self.precio_base + iva - descuento
 
-def is_existing_product(P: int, types_of_products: list) -> bool:
-  for product_type in types_of_products:
-    for product in product_type.products:
-      if product.code == P:
-        return True
-  return False
+class CD(Producto):
 
-products = []
-types_of_products = []
+  def __init__(self, codigo, precio_base, titulo, interprete, año_publicacion):
+    super().__init__(codigo, precio_base)
+    self.iva = 0.12
+    self.titulo = titulo
+    self.interprete = interprete
+    self.año_publicacion = año_publicacion
+    self.descuento = 0.10
+
+  @property
+  def precio_venta(self):
+    iva = self.precio_base * self.iva
+    descuento = self.precio_base * self.descuento
+    return self.precio_base + iva - descuento
